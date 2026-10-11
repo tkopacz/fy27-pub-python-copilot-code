@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Od komentarza do działania</title>
+  <style>
+    body { font: 17px system-ui, sans-serif; max-width: 850px; margin: 3rem auto; padding: 0 1rem; color: #162b25; }
+    label { display: block; margin-top: 1rem; }
+    textarea, input, button { font: inherit; padding: .7rem; box-sizing: border-box; }
+    textarea { width: 100%; min-height: 130px; }
+    button { background: #125d43; color: white; border: 0; margin-top: 1rem; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    pre { background: #eef4f0; padding: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .notice { border-left: 4px solid #c88700; padding: 1rem; background: #fff8e6; }
+  </style>
+</head>
+<body>
+  <h1>Od komentarza do działania</h1>
+  <p class="notice">Tryb: <strong>{{ mode }}</strong>.
+    {% if mode == "demo" %}Klasyfikator regułowy — to nie jest LLM.{% else %}Tekst po maskowaniu trafia do skonfigurowanego endpointu LLM.{% endif %}
+    Wyłącznie dane syntetyczne. Starter ma znany błąd maskowania.
+    Powstaje tylko podgląd szkicu, nic nie trafia do Jiry.</p>
+  <form id="triage">
+    <label for="store">Identyfikator sklepu</label>
+    <input id="store" value="store-001" pattern="store-[0-9]{3}" required>
+    <label for="text">Komentarz / zgłoszenie</label>
+    <textarea id="text" maxlength="4000" required>Obsługa super, ale nie mogę zamówić towaru.</textarea>
+    <button id="submit" type="submit">Przygotuj triage</button>
+  </form>
+  <h2>Wynik i szkic zgłoszenia</h2>
+  <pre id="result" aria-live="polite">Oczekiwanie na zgłoszenie.</pre>
+  <script>
+    document.querySelector("#triage").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = document.querySelector("#submit");
+      const result = document.querySelector("#result");
+      button.disabled = true;
+      result.textContent = "Przetwarzanie...";
+      try {
+        const response = await fetch("/api/triage", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            store_id: document.querySelector("#store").value,
+            text: document.querySelector("#text").value
+          })
+        });
+        const body = await response.json();
+        result.textContent = response.ok
+          ? JSON.stringify(body, null, 2)
+          : `Błąd HTTP ${response.status}: ${body.error}`;
+      } catch (error) {
+        result.textContent = `Nie udało się połączyć z aplikacją: ${error.message}`;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

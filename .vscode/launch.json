@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flask triage (demo)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "flask",
+      "args": ["--app", "triage.app:create_app", "run", "--no-debugger", "--no-reload"],
+      "env": { "TRIAGE_MODE": "demo" },
+      "jinja": true,
+      "justMyCode": true
+    }
+  ]
+}

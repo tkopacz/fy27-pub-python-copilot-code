@@ -1,0 +1,7 @@
+{
+  "name": "triage-workshop",
+  "version": "1.0.0",
+  "description": "Local workshop acceptance automation with evidence, not source edits.",
+  "agents": "agents/",
+  "skills": "skills/"
+}

@@ -1,0 +1,18 @@
+\defaultfontfeatures[\rmfamily]{Scale=1}
+\setmainfont[Ligatures=NoCommon]{Latin Modern Roman}
+\setmonofont[Ligatures=NoCommon]{Latin Modern Mono}
+
+% Preserve source characters instead of leaving copy/paste to gap heuristics.
+\XeTeXgenerateactualtext=1
+% Cross-word shaping can swallow hyperlink boundaries in the XeTeX PDF driver.
+\XeTeXinterwordspaceshaping=0
+\newcommand{\CopyableCodeSpace}{\char32\relax}
+\DeclareTextFontCommand{\texttt}{\ttfamily\let\ \CopyableCodeSpace}
+\usepackage{fancyvrb}
+% A real, invisible U+0020 glyph, not verbatim's default spacing command.
+\renewcommand{\FancyVerbSpace}{\CopyableCodeSpace}
+\newcommand{\CopyableCodeQuotes}{%
+  \renewcommand{\textquotesingle}{\char39\relax}%
+  \renewcommand{\textasciigrave}{\char96\relax}%
+}
+\fvset{showspaces=true,formatcom=\CopyableCodeQuotes}

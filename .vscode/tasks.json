@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Lab: run demo",
+      "type": "shell",
+      "command": ".\\scripts\\run.ps1",
+      "problemMatcher": []
+    },
+    {
+      "label": "Lab: tests (one intentional failure)",
+      "type": "shell",
+      "command": ".\\scripts\\test.ps1",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Lab: evaluate demo",
+      "type": "shell",
+      "command": ".\\scripts\\evaluate.ps1 -Output reports\\baseline.json",
+      "problemMatcher": []
+    },
+    {
+      "label": "Lab: evaluation TUI",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe -m triage.monitor",
+      "problemMatcher": []
+    }
+  ]
+}
